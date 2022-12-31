@@ -1,5 +1,6 @@
 import requests
 import json
+from datetime import datetime, timedelta
 
 # Set the API endpoint URL
 endpoint_url = "https://open.tiktok.com/api/v2/video/upload"
@@ -8,34 +9,37 @@ endpoint_url = "https://open.tiktok.com/api/v2/video/upload"
 api_key = "your_api_key"
 access_token = "your_access_token"
 
-# Set the video file path
-video_file = "path/to/your/video/file.mp4"
 
-# Set the video metadata
-title = "My TikTok Video"
-description = "This is my TikTok video"
-tags = ["tiktok", "video"]
+def uploadToTikTok(
+    video_path,
+    scheduled_publish_time,
+    title='', 
+    description='', 
+    tags=[]
+):
+    # Set the API headers
+    headers = {
+        "api_key": api_key,
+        "access_token": access_token,
+    }
 
-# Set the scheduled publish time (in UTC)
-scheduled_publish_time = "2022-01-01T00:00:00Z"
+    # Set the API data
+    data = {
+        "video": open(video_path, "rb"),
+        "title": title,
+        "description": description,
+        "tags": ",".join(tags),
+        "scheduled_publish_time": scheduled_publish_time,
+    }
 
-# Set the API headers
-headers = {
-    "api_key": api_key,
-    "access_token": access_token,
-}
+    # Send the API request
+    response = requests.post(endpoint_url, headers=headers, data=data)
 
-# Set the API data
-data = {
-    "video": open(video_file, "rb"),
-    "title": title,
-    "description": description,
-    "tags": ",".join(tags),
-    "scheduled_publish_time": scheduled_publish_time,
-}
+    # Print the API response
+    print(response.text)    
 
-# Send the API request
-response = requests.post(endpoint_url, headers=headers, data=data)
 
-# Print the API response
-print(response.text)
+if __name__ == "__main__":
+    video_path = "Videos\\1_Compiled_Videos\\CHAP_1_VERSE_[1, 2, 3, 4, 5, 6, 7].mp4"
+    post_schedule = datetime.now() + timedelta(minutes=5)
+    uploadToTikTok(video_path, post_schedule)

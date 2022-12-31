@@ -9,7 +9,7 @@ creds = google.auth.default(scopes=scopes)
 service = googleapiclient.discovery.build("youtube", "v3", credentials=creds)
 
 # Define the video file to be uploaded
-video_path = "/path/to/video.mp4"
+video_path = "./1.mp4"
 
 # Create a snippet for the video
 video_snippet = {
